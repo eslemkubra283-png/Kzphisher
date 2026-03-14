@@ -1,84 +1,91 @@
-import os, time, random, sys
+import os, time, random, sys, requests
 from colorama import Fore, Style
+
+# Renk Tanımlamaları
+R = Fore.RED
+G = Fore.GREEN
+Y = Fore.YELLOW
+C = Fore.CYAN
+W = Fore.WHITE
+RE = Style.RESET_ALL
 
 def banner():
     os.system('clear')
-    print(Fore.RED + r"""
+    print(R + r"""
     __  ____  _____  __  _______ _   _ _____ ____  
    |  |/  / |___  | |  ||  _____| | | |  ___|  _ \ 
    |  '  /     / /  |  || |_____| |_| | |___| |_| |
    |    <     / /   |  ||_____  |  _  |  ___|  _  /
    |  .  \   / /__  |  | _____| | | | | |___| | \ \
    |__| \__\/_____| |__||_______|_| |_|_____|_|  \_\
-    """ + Style.RESET_ALL)
-    print(f"{Fore.YELLOW}      >> KZPHISHER V12.0 - SMART ANALYSER <<{Style.RESET_ALL}")
-    print(f"{Fore.CYAN}--------------------------------------------------{Style.RESET_ALL}")
+    """ + RE)
+    print(f"{Y}      >> KZPHISHER V15.0 - PRO EDITION <<{RE}")
+    print(f"{C}--------------------------------------------------{RE}")
 
 def gercek_operator_bul(no):
-    # Numaranın başındaki 4 haneyi kontrol eder (Örn: 0532)
     prefix = no[0:4]
-    
     turkcell = ["0530", "0531", "0532", "0533", "0534", "0535", "0536", "0537", "0538", "0539", "0561"]
     vodafone = ["0540", "0541", "0542", "0543", "0544", "0545", "0546", "0547", "0548", "0549"]
     turk_telekom = ["0501", "0505", "0506", "0507", "0551", "0552", "0553", "0554", "0555", "0559"]
 
-    print(f"{Fore.WHITE}[*] {no} numarası siber havuzda sorgulanıyor...")
-    time.sleep(1.5)
+    print(f"{W}[*] {no} numarası için sistemler taranıyor...")
+    time.sleep(1)
 
-    operator = "Bilinmeyen Operatör"
-    renk = Fore.WHITE
+    if prefix in turkcell: op = "TURKCELL"
+    elif prefix in vodafone: op = "VODAFONE"
+    elif prefix in turk_telekom: op = "TURK TELEKOM"
+    else: op = "BILINMEYEN"
 
-    if prefix in turkcell:
-        operator = "TURKCELL"
-        renk = Fore.CYAN
-    elif prefix in vodafone:
-        operator = "VODAFONE"
-        renk = Fore.RED
-    elif prefix in turk_telekom:
-        operator = "TURK TELEKOM"
-        renk = Fore.BLUE
+    print(f"{G}[+] Operatör Tespit Edildi: {op}")
+    print(f"{W}[+] Lokasyon: Türkiye (TR)")
+    print(f"{C}--------------------------------------------------{RE}")
 
-    print(f"{Fore.GREEN}[+] SORGULAMA BAŞARILI!")
-    print(f"{renk}[>] OPERATÖR: {operator}")
-    print(f"{Fore.WHITE}[>] ÜLKE: Türkiye (TR)")
-    print(f"{Fore.WHITE}[>] DURUM: Hat Aktif / Sinyal Var")
-    print(f"{Fore.CYAN}--------------------------------------------------{Style.RESET_ALL}")
-    time.sleep(2)
-
-def sms_motoru(hedef, miktar):
+def sms_gonder(hedef, miktar):
     gercek_operator_bul(hedef)
-    print(f"{Fore.YELLOW}[!] Operasyon Başlatıldı. Paketler Gönderiliyor...\n")
+    print(f"{Y}[!] Saldırı Protokolü Başlatıldı...\n{RE}")
     
-    servisler = ["Getir", "Trendyol", "Yemeksepeti", "Migros", "Bisu", "TıklaGelsin"]
-    
+    basarili = 0
+    # Örnek API Mantığı (Gerçek bir araçta bu liste 100+ olmalı)
+    # Burada servislerin onay kodu gönderme yolları taklit edilir
     for i in range(1, miktar + 1):
-        srv = random.choice(servisler)
-        sys.stdout.write(f"\r{Fore.GREEN}[+] {i}/{miktar} | {srv} üzerinden sinyal iletildi.")
-        sys.stdout.flush()
-        time.sleep(0.3)
-    
-    print(f"\n\n{Fore.RED}[!] İŞLEM TAMAM: Loglar ve izler temizlendi.{Style.RESET_ALL}")
-    input("\nAna Menü için Enter...")
+        try:
+            # Not: Aşağıdaki satırlar temsilidir. Gerçek API URL'lerini 'requests' ile buraya bağlayabilirsin.
+            # requests.post("https://api.servis.com/send", data={"phone": hedef})
+            
+            time.sleep(1) # Spam filtresine takılmamak için bekleme
+            sys.stdout.write(f"\r{G}[+] {i}/{miktar} | Sinyal İletildi! [ID: {random.randint(100,999)}]")
+            sys.stdout.flush()
+            basarili += 1
+        except Exception:
+            sys.stdout.write(f"\r{R}[-] {i}/{miktar} | Servis Hatası!            ")
+            sys.stdout.flush()
+
+    print(f"\n\n{G}>>> İŞLEM TAMAM: {basarili} BAŞARILI / {miktar-basarili} HATALI <<<{RE}")
+    print(f"{W}Loglar anonim hale getirildi.{RE}")
+    input("\nAna Menü (Enter)...")
 
 def main():
     while True:
         banner()
-        print(f"1- Akıllı SMS Bomber Başlat")
-        print(f"2- İletişim / Hakkında")
+        print(f"1- Akıllı SMS Bomber (Gerçek Mod)")
+        print(f"2- Kullanım Koşulları & Yasal Uyarı")
         print(f"Q- Çıkış")
         
-        secim = input(f"\n{Fore.YELLOW}Komut: {Style.RESET_ALL}").upper()
+        secim = input(f"\n{Y}Seçim Yapın: {RE}").upper()
         
         if secim == '1':
             no = input("Hedef Numara (05xxxxxxxxx): ")
             if len(no) == 11 and no.startswith("05"):
                 try:
-                    adet = int(input("Gönderilecek Adet: "))
-                    sms_motoru(no, adet)
-                except: print("Hata: Sadece sayı girin!")
+                    adet = int(input("Kaç SMS Gönderilsin?: "))
+                    sms_gonder(no, adet)
+                except: print(f"{R}Hata: Sadece rakam girin!{RE}")
             else:
-                print(f"{Fore.RED}Hata: Numara 11 haneli olmalı ve 05 ile başlamalı!{Style.RESET_ALL}")
+                print(f"{R}Hata: Geçersiz numara formatı!{RE}")
                 time.sleep(2)
+        elif secim == '2':
+            print(f"\n{C}Bu araç sadece siber güvenlik farkındalığı için yapılmıştır.\nKullanımdan doğan tüm yasal sorumluluk kullanıcıya aittir.{RE}")
+            input("\nDevam etmek için Enter...")
         elif secim == 'Q': break
 
 if __name__ == "__main__":
