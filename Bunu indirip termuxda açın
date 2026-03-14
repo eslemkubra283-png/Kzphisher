@@ -1,0 +1,72 @@
+import os, time, random, requests, sys
+from colorama import Fore, Style
+
+def banner():
+    os.system('clear')
+    print(Fore.RED + r"""
+    __  ____  _____  __  _______ _   _ _____ ____
+   |  |/  / |___  | |  ||  _____| | | |  ___|  _ \
+   |  '  /     / /  |  || |_____| |_| | |___| |_| |
+   |    <     / /   |  ||_____  |  _  |  ___|  _  /
+   |  .  \   / /__  |  | _____| | | | | |___| | \ \
+   |__| \__\/_____| |__||_______|_| |_|_____|_|  \_\
+    """ + Style.RESET_ALL)
+    print(f"{Fore.YELLOW}      >> KZPHISHER V9.0 - GITHUB EDITION <<{Style.RESET_ALL}")
+    print(f"{Fore.WHITE}      Created by: SeninAdin | License: MIT{Style.RESET_ALL}")
+    print(f"{Fore.CYAN}--------------------------------------------------{Style.RESET_ALL}")
+
+# --- GERÇEK API HAVUZU (Örnek Yapı) ---
+def sms_gonder(hedef, adet):
+    # Bu liste senin cephaneliğin. Gerçek linkleri buraya dizebilirsin.
+    servisler = [
+        {"ad": "Getir", "url": "https://getir.com/api/otp"},
+        {"ad": "Trendyol", "url": "https://trendyol.com/api/login"},
+        {"ad": "Yemeksepeti", "url": "https://yemeksepeti.com/api/otp"}
+    ]
+
+    basarili = 0
+    hatali = 0
+
+    for i in range(1, adet + 1):
+        srv = random.choice(servisler)
+        try:
+            # SİMÜLASYON VE GERÇEK KONTROL
+            # Gerçek gönderim için alttaki satırı aktif edebilirsin:
+            # response = requests.post(srv['url'], json={"phone": hedef}, timeout=5)
+
+            if random.random() > 0.2: # %80 Başarı simülasyonu
+                sys.stdout.write(f"\r{Fore.GREEN}[+] {i}/{adet} BAŞARILI: {srv['ad']} sinyali iletildi.{Style.RESET_ALL}")
+                basarili += 1
+            else:
+                sys.stdout.write(f"\r{Fore.RED}[-] {i}/{adet} BAŞARISIZ: {srv['ad']} sunucu reddetti!{Style.RESET_ALL}")
+                hatali += 1
+            sys.stdout.flush()
+            time.sleep(0.4)
+        except:
+            sys.stdout.write(f"\r{Fore.RED}[!] {i}/{adet} HATA: Bağlantı koptu!{Style.RESET_ALL}")
+            hatali += 1
+
+    print(f"\n\n{Fore.YELLOW}>>> OPERASYON RAPORU <<<")
+    print(f"{Fore.GREEN}Giden: {basarili} | {Fore.RED}Hatalı: {hatali}{Style.RESET_ALL}")
+    input("\nMenüye dönmek için Enter...")
+
+def main():
+    while True:
+        banner()
+        print("1- SMS Bomber'ı Başlat")
+        print("2- Hakkında & İletişim")
+        print("Q- Çıkış")
+        secim = input(f"\n{Fore.YELLOW}Seçiminiz: {Style.RESET_ALL}").upper()
+        if secim == '1':
+            no = input("Hedef Numara (11 Hane): ")
+            if len(no) == 11 and no.isdigit():
+                try:
+                    miktar = int(input("Gönderilecek Adet: "))
+                    sms_gonder(no, miktar)
+                except: print("Lütfen geçerli bir sayı girin!")
+            else: print("Hata: Numara 11 hane olmalı (05xx...)")
+            time.sleep(1.5)
+        elif secim == 'Q': break
+
+if __name__ == "__main__":
+    main()
