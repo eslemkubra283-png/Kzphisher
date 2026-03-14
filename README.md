@@ -1,5 +1,14 @@
 # Kzphisher
 Kzphisher tamamamen ücretsiz bir SMS bomber dir 
+
+
+
+BURADA GERÇEKLEŞEN HERŞEY EĞİTİM VE ŞAKA AMAÇLIDIR
+
+
+
+
+
 ## 🚀 Kurulum ve Kullanım
 
 Aracı Termux üzerinden çalıştırmak için aşağıdaki komutları sırayla kopyalayıp yapıştırın:
